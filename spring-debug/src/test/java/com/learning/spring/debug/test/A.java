@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-public class A implements ApplicationContextAware, BeanFactoryAware {
+public class A implements ApplicationContextAware, BeanFactoryAware, BeanPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(A.class);
 
@@ -25,5 +26,21 @@ public class A implements ApplicationContextAware, BeanFactoryAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         logger.info("通过继承ApplicationContextAware获取applicationContext");
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        logger.info("执行BeanPostProcessor#postProcessBeforeInitialization");
+        return BeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        logger.info("执行BeanPostProcessor#postProcessAfterInitialization");
+        return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
+    }
+
+    public void sayHello(){
+        logger.info("say hello");
     }
 }
