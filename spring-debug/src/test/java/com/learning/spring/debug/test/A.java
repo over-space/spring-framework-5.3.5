@@ -13,6 +13,7 @@ public class A implements ApplicationContextAware, BeanFactoryAware, BeanPostPro
 
     private static final Logger logger = LoggerFactory.getLogger(A.class);
 
+    private String name;
 
     public void initMethod(){
         logger.info("执行A#init-method方法");
@@ -40,7 +41,11 @@ public class A implements ApplicationContextAware, BeanFactoryAware, BeanPostPro
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
     public void sayHello(){
-        logger.info("say hello");
+        logger.info("{}: say hello", name);
     }
 }

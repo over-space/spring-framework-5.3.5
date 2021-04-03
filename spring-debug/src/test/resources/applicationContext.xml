@@ -3,7 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="a" init-method="initMethod" class="com.learning.spring.debug.test.A"/>
+    <bean id="a" init-method="initMethod" class="com.learning.spring.debug.test.A">
+        <property name="name" value="jack"/>
+    </bean>
 
     <bean id="bFactoryBean" class="com.learning.spring.debug.test.BFactoryBean"/>
 </beans>
