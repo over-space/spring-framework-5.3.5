@@ -1,11 +1,17 @@
 package com.learning.spring.debug.test;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.FactoryBean;
 
 public class BFactoryBean implements FactoryBean<B> {
 
+    private static final Logger logger = LogManager.getLogger(BFactoryBean.class);
+
+
     @Override
     public B getObject() throws Exception {
+        logger.info("通过FactoryBean自定义创建Bean");
         return new B();
     }
 
