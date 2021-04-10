@@ -17,8 +17,8 @@ public class SpringDebugTest extends BaseTest {
 
     @BeforeEach
     public void initApplicationContext() {
-        applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        // applicationContext = new MyClassPathXmlApplicationContext("applicationContext.xml");
+        // applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        applicationContext = new MyClassPathXmlApplicationContext("applicationContext.xml");
     }
 
     @Test
@@ -40,4 +40,11 @@ public class SpringDebugTest extends BaseTest {
         Assertions.assertTrue(bean1 == bean2);
     }
 
+    @Test
+    public void testCircularReferences(){
+
+        C1 c1 = applicationContext.getBean(C1.class);
+
+        logger.info("c1:{},c2：{}",c1,c1.getC2());
+    }
 }

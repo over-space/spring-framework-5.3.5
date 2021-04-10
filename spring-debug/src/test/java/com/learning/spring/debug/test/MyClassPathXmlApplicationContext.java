@@ -28,7 +28,11 @@ public class MyClassPathXmlApplicationContext extends ClassPathXmlApplicationCon
     @Override
     protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
         setAllowBeanDefinitionOverriding(true);
+
+        // 是否允许循环依赖
         setAllowCircularReferences(true);
+
+        super.customizeBeanFactory(beanFactory);
     }
 
     /**
@@ -42,7 +46,6 @@ public class MyClassPathXmlApplicationContext extends ClassPathXmlApplicationCon
 
 
         // 检测系统是否存在对应的的环境变量，否则就抛出异常
-        getEnvironment().getRequiredProperty("flag");
-
+        // getEnvironment().getRequiredProperty("flag");
     }
 }
