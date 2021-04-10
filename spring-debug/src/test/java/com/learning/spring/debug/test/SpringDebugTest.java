@@ -18,6 +18,7 @@ public class SpringDebugTest extends BaseTest {
     @BeforeEach
     public void initApplicationContext() {
         applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+        // applicationContext = new MyClassPathXmlApplicationContext("applicationContext.xml");
     }
 
     @Test

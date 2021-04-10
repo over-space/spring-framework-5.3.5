@@ -542,7 +542,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
-				// Invoke factory processors registered as beans in the context.
+				// Invoke factory processors re	gistered as beans in the context.
 				// 执行全部实现BeanFactoryPostProcess的子类
 				invokeBeanFactoryPostProcessors(beanFactory);
 
@@ -601,7 +601,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void prepareRefresh() {
 		// Switch to active.
+		// 容器启动时间
 		this.startupDate = System.currentTimeMillis();
+
+		// 设置容器启动标志位
 		this.closed.set(false);
 		this.active.set(true);
 
@@ -615,6 +618,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		// 提供给子类扩张，父类啥也干.
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
