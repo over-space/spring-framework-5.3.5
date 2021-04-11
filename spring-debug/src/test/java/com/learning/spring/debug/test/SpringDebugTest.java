@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SpringDebugTest extends BaseTest {
 
@@ -41,10 +40,10 @@ public class SpringDebugTest extends BaseTest {
     }
 
     @Test
-    public void testCircularReferences(){
+    public void testCircularReferences() {
 
         C1 c1 = applicationContext.getBean(C1.class);
 
-        logger.info("c1:{},c2：{}",c1,c1.getC2());
+        logger.info("c1:{},c2：{}", c1, c1.getC2());
     }
 }
