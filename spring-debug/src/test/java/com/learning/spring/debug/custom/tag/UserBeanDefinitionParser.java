@@ -1,11 +1,16 @@
 package com.learning.spring.debug.custom.tag;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 public class UserBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+
+    private static final Logger logger = LogManager.getLogger(UserBeanDefinitionParser.class);
+
 
     @Override
     protected Class<?> getBeanClass(Element element) {
@@ -15,6 +20,8 @@ public class UserBeanDefinitionParser extends AbstractSingleBeanDefinitionParser
 
     @Override
     protected void doParse(Element element, BeanDefinitionBuilder builder) {
+        logger.info("自定义标签，自定义属性解析。");
+
         String username = element.getAttribute("username");
         if (StringUtils.hasText(username)) {
             builder.addPropertyValue("username", username);
