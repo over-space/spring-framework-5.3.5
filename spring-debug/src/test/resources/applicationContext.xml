@@ -2,11 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:custom="http://www.learning.org/schema/user"
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context.xsd">
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.learning.org/schema/user
+            http://www.learning.org/schema/user.xsd">
 
     <context:property-placeholder location="classpath:foo.properties" />
 
@@ -24,6 +27,7 @@
         <property name="c1" ref="c1"/>
     </bean>
 
+    <custom:user id="1001" username="lisi" password="123456" email="xxplus@outlook.com" age="20"></custom:user>
 
     <!--<bean name="c3" class="com.learning.spring.debug.test.C3"/>-->
     <!--<bean name="c3" class="com.learning.spring.debug.test.C4"/>-->
