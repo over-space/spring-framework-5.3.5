@@ -1,6 +1,6 @@
 package com.learning.spring.debug.test;
 
-import com.learning.spring.debug.custom.tag.User;
+import com.learning.spring.debug.BaseTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
@@ -46,12 +46,5 @@ public class SpringDebugTest extends BaseTest {
         C1 c1 = applicationContext.getBean(C1.class);
 
         logger.info("c1:{},c2：{}", c1, c1.getC2());
-    }
-
-    @Test
-    public void testCustomTag(){
-        User user = applicationContext.getBean(User.class);
-
-        logger.info("user: {}", user);
     }
 }

@@ -8,19 +8,6 @@
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:foo.properties" />
 
-    <bean id="a" init-method="initMethod" class="com.learning.spring.debug.test.A">
-        <property name="name" value="jack"/>
-    </bean>
 
-    <bean id="bFactoryBean" class="com.learning.spring.debug.test.BFactoryBean"/>
-
-    <bean id="c1" class="com.learning.spring.debug.test.C1">
-        <property name="c2" ref="c2"/>
-    </bean>
-
-    <bean id="c2" class="com.learning.spring.debug.test.C2">
-        <property name="c1" ref="c1"/>
-    </bean>
 </beans>
