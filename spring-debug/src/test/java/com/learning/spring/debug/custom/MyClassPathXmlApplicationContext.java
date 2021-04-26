@@ -1,4 +1,4 @@
-package com.learning.spring.debug.test;
+package com.learning.spring.debug.custom;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

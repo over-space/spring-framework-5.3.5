@@ -1,4 +1,4 @@
-package com.learning.spring.debug.test;
+package com.learning.spring.debug.custom;
 
 public class C1 {
 
