@@ -54,6 +54,9 @@ import org.springframework.util.StringUtils;
  */
 public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 
+	/**
+	 * 默认SPEL表达式前缀
+	 */
 	/** Default expression prefix: "#{". */
 	public static final String DEFAULT_EXPRESSION_PREFIX = "#{";
 

@@ -533,7 +533,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
-			// 准备Bean工厂
+			// 准备Bean工厂,对各种属性进行填充
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -675,10 +675,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         // 设置类加载器
 		beanFactory.setBeanClassLoader(getClassLoader());
 
-		// 设置SPEL解析器
 		if (!shouldIgnoreSpel) {
+			// 设置SPEL解析器，如果shouldIgnoreSpel=true忽略el表达式，不进行解析。
 			beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		}
+
+		// 注册属性编辑器
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks.
