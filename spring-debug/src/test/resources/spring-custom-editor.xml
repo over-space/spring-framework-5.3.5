@@ -15,11 +15,23 @@
     </bean>
 
 
+    <!--配置方式1-->
+    <!--<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+    <!--    <property name="propertyEditorRegistrars">-->
+    <!--        <list>-->
+    <!--            <bean class="com.learning.spring.debug.custom.editor.AddressPropertyEditorRegistrar"></bean>-->
+    <!--        </list>-->
+    <!--    </property>-->
+    <!--</bean>-->
+
+    <!--配置方式2-->
     <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-        <property name="propertyEditorRegistrars">
-            <list>
-                <bean class="com.learning.spring.debug.custom.editor.AddressPropertyEditorRegistrar"></bean>
-            </list>
+        <property name="customEditors">
+            <map>
+                <entry key="com.learning.spring.debug.custom.editor.Address">
+                    <value>com.learning.spring.debug.custom.editor.AddressPropertyEditorRegistrar</value>
+                </entry>
+            </map>
         </property>
     </bean>
 
