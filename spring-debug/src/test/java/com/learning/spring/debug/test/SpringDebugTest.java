@@ -10,17 +10,13 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ContextConfiguration;
 
+@ContextConfiguration("classpath:applicationContext.xml")
 public class SpringDebugTest extends BaseTest {
 
     private static final Logger logger = LogManager.getLogger(SpringDebugTest.class);
 
-
-    @BeforeEach
-    public void initApplicationContext() {
-        // applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        applicationContext = new MyClassPathXmlApplicationContext("applicationContext.xml");
-    }
 
     @Test
     public void testBeanAware() {

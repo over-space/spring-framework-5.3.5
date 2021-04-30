@@ -14,7 +14,7 @@ public class AddressPropertyEditorRegistrar implements PropertyEditorRegistrar {
 
         logger.info("自定义属性编辑器，注册自定义属性编辑器。 ");
 
-        registry.registerCustomEditor(Address.class, new AddressPropertyEditorSupport());
+        registry.registerCustomEditor(Address.class, new AddressPropertyEditor());
 
     }
 }

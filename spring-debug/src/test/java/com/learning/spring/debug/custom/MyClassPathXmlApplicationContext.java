@@ -1,8 +1,10 @@
 package com.learning.spring.debug.custom;
 
+import com.learning.spring.debug.custom.bfpp.CustomBeanFactoryPostProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -21,6 +23,11 @@ public class MyClassPathXmlApplicationContext extends ClassPathXmlApplicationCon
         super(configLocation);
     }
 
+    @Override
+    protected void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+        logger.info("执行ClassPathXmlApplicationContext#postProcessBeanFactory方法");
+    }
+
     /**
      * 子类扩展实现
      * 控制是否允许覆盖同名称的不同对象以及是否允许循环依赖。
@@ -33,6 +40,9 @@ public class MyClassPathXmlApplicationContext extends ClassPathXmlApplicationCon
 
         // 是否允许循环依赖
         setAllowCircularReferences(true);
+
+        // 手动添加自定义BeanFactoryPostProcessor类
+        super.addBeanFactoryPostProcessor(new CustomBeanFactoryPostProcessor());
 
         super.customizeBeanFactory(beanFactory);
     }

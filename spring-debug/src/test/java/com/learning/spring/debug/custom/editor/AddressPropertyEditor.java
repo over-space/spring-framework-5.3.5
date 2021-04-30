@@ -5,9 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.beans.PropertyEditorSupport;
 
-public class AddressPropertyEditorSupport extends PropertyEditorSupport {
+public class AddressPropertyEditor extends PropertyEditorSupport {
 
-    private static final Logger logger = LogManager.getLogger(AddressPropertyEditorSupport.class);
+    private static final Logger logger = LogManager.getLogger(AddressPropertyEditor.class);
 
 
     @Override

@@ -1,10 +1,14 @@
 package com.learning.spring.debug;
 
+import com.learning.spring.debug.custom.MyClassPathXmlApplicationContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
 
 public abstract class BaseTest {
 
@@ -26,4 +30,18 @@ public abstract class BaseTest {
         logger.info("================================================================================================");
     }
 
+    @BeforeEach
+    public void initApplicationContext() {
+        ContextConfiguration annotation = this.getClass().getDeclaredAnnotation(ContextConfiguration.class);
+
+        Assertions.assertNotNull(annotation, "请使用@ContextConfiguration注解指定spring配置文件。");
+
+        String[] locations = annotation.value();
+
+        Assertions.assertNotNull(locations);
+
+        Assertions.assertNotNull(annotation, "请使用@ContextConfiguration注解指定spring xml配置文件。");
+
+        applicationContext = new MyClassPathXmlApplicationContext(locations[0]);
+    }
 }
