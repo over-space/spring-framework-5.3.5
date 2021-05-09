@@ -72,6 +72,11 @@ final class PostProcessorRegistrationDelegate {
 		// to ensure that your proposal does not result in a breaking change:
 		// https://github.com/spring-projects/spring-framework/issues?q=PostProcessorRegistrationDelegate+is%3Aclosed+label%3A%22status%3A+declined%22
 
+		// 执行顺序
+		// 1. 先执行由addBeanFactoryPostProcessor方法注册的BeanFactoryPostProcessor类，即参数beanFactoryPostProcessors。
+		// 2. 按类型查找全部的BeanDefinitionRegistryPostProcessor子类，优先执行子类方法BeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry，然后再执行父类BeanFactoryPostProcessor#postProcessBeanFactory方法
+		// 3. 按类型查找全部的BeanFactoryPostProcessor子类，然后执行postProcessBeanFactory方法。
+
 		// BeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry
 		// BeanFactoryPostProcessor#postProcessBeanFactory
 
@@ -80,6 +85,7 @@ final class PostProcessorRegistrationDelegate {
 		Set<String> processedBeans = new HashSet<>();
 
 		// 优先执行BeanDefinitionRegistryPostProcessor
+		// beanFactory为DefaultListableBeanFactory,为BeanDefinitionRegistry子类
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			// BeanDefinitionRegistry类对BeanDefinition进行管理。
 
@@ -110,6 +116,7 @@ final class PostProcessorRegistrationDelegate {
 			// uninitialized to let the bean factory post-processors apply to them!
 			// Separate between BeanDefinitionRegistryPostProcessors that implement
 			// PriorityOrdered, Ordered, and the rest.
+			// 存储当前正要执行的BeanDefinitionRegistryPostProcessor类
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
@@ -183,6 +190,7 @@ final class PostProcessorRegistrationDelegate {
 		}
 		else {
 			// Invoke factory processors registered with the context instance.
+			// 执行
 			invokeBeanFactoryPostProcessors(beanFactoryPostProcessors, beanFactory);
 		}
 
