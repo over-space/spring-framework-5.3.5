@@ -1,4 +1,4 @@
-package com.learning.spring.debug.custom.bfpp;
+package com.learning.spring.debug.custom.bean.factory.post.processor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

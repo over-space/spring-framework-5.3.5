@@ -42,6 +42,8 @@ public abstract class BaseTest {
 
         Assertions.assertNotNull(annotation, "请使用@ContextConfiguration注解指定spring xml配置文件。");
 
+        logger.info("spring locations : {}\n", locations);
+
         applicationContext = new MyClassPathXmlApplicationContext(locations[0]);
     }
 }

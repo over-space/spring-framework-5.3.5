@@ -35,8 +35,4 @@
         </property>
     </bean>
 
-    <!--自定义实现BeanFactoryPostProcessor-->
-    <!--可以通过MyClassPathXmlApplicationContext#customizeBeanFactory方法 super.addBeanFactoryPostProcessor(new CustomBeanFactoryPostProcessor()); 配置-->
-    <!--<bean class="com.learning.spring.debug.custom.bfpp.CustomBeanFactoryPostProcessor"></bean>-->
-
 </beans>

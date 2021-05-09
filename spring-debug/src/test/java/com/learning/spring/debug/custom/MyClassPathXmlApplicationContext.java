@@ -1,6 +1,6 @@
 package com.learning.spring.debug.custom;
 
-import com.learning.spring.debug.custom.bfpp.CustomBeanFactoryPostProcessor;
+import com.learning.spring.debug.custom.bean.factory.post.processor.CustomBeanFactoryPostProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;
@@ -42,7 +42,7 @@ public class MyClassPathXmlApplicationContext extends ClassPathXmlApplicationCon
         setAllowCircularReferences(true);
 
         // 手动添加自定义BeanFactoryPostProcessor类
-        super.addBeanFactoryPostProcessor(new CustomBeanFactoryPostProcessor());
+        // super.addBeanFactoryPostProcessor(new CustomBeanFactoryPostProcessor());
 
         super.customizeBeanFactory(beanFactory);
     }
