@@ -78,6 +78,8 @@ class ConditionEvaluator {
 	 * @return if the item should be skipped
 	 */
 	public boolean shouldSkip(@Nullable AnnotatedTypeMetadata metadata, @Nullable ConfigurationPhase phase) {
+
+		// *判定类是否写@Conditional注解
 		if (metadata == null || !metadata.isAnnotated(Conditional.class.getName())) {
 			return false;
 		}
@@ -85,8 +87,10 @@ class ConditionEvaluator {
 		if (phase == null) {
 			if (metadata instanceof AnnotationMetadata &&
 					ConfigurationClassUtils.isConfigurationCandidate((AnnotationMetadata) metadata)) {
+				// 递归
 				return shouldSkip(metadata, ConfigurationPhase.PARSE_CONFIGURATION);
 			}
+			// 递归
 			return shouldSkip(metadata, ConfigurationPhase.REGISTER_BEAN);
 		}
 
@@ -105,6 +109,8 @@ class ConditionEvaluator {
 			if (condition instanceof ConfigurationCondition) {
 				requiredPhase = ((ConfigurationCondition) condition).getConfigurationPhase();
 			}
+
+			// *执行Condition#matches方法，判定是否满足条件
 			if ((requiredPhase == null || requiredPhase == phase) && !condition.matches(this.context, metadata)) {
 				return true;
 			}

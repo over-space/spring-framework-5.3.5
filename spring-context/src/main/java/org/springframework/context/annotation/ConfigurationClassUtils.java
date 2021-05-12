@@ -67,6 +67,7 @@ abstract class ConfigurationClassUtils {
 	private static final Set<String> candidateIndicators = new HashSet<>(8);
 
 	static {
+		// *包含被如下4个注解修饰的其他注解，如被@Component注解修饰的@Service,@Repository
 		candidateIndicators.add(Component.class.getName());
 		candidateIndicators.add(ComponentScan.class.getName());
 		candidateIndicators.add(Import.class.getName());
@@ -143,6 +144,7 @@ abstract class ConfigurationClassUtils {
 		}
 
 		// It's a full or lite configuration candidate... Let's determine the order value, if any.
+		// @Order注解
 		Integer order = getOrder(metadata);
 		if (order != null) {
 			beanDef.setAttribute(ORDER_ATTRIBUTE, order);

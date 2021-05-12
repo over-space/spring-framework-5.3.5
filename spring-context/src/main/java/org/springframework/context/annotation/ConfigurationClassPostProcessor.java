@@ -242,6 +242,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			throw new IllegalStateException(
 					"postProcessBeanFactory already called on this post-processor against " + registry);
 		}
+
+		// 将正在处理的registryId放入registriesPostProcessed集合，避免重复执行。
 		this.registriesPostProcessed.add(registryId);
 
 		processConfigBeanDefinitions(registry);
@@ -275,8 +277,10 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
-		String[] candidateNames = registry.getBeanDefinitionNames();
 
+
+		// *获取全部的beanDefinition#name，然后将满足条件(@Configuration,@Component,@ComponentScan,@Import, @ImportResource，@Bean)的beanDefinition转换成BeanDefinitionHolder加入集合。
+		String[] candidateNames = registry.getBeanDefinitionNames();
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
@@ -333,6 +337,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
 			StartupStep processConfig = this.applicationStartup.start("spring.context.config-classes.parse");
+
+			// *执行解析处理
 			parser.parse(candidates);
 			parser.validate();
 
