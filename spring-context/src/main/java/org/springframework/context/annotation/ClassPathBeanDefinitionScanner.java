@@ -272,23 +272,39 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Assert.notEmpty(basePackages, "At least one base package must be specified");
 		Set<BeanDefinitionHolder> beanDefinitions = new LinkedHashSet<>();
+
+		// *遍历basePackages
 		for (String basePackage : basePackages) {
+
+			// *扫描basePackage，将符合要求的bean定义全部找出来
 			Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
+
 			for (BeanDefinition candidate : candidates) {
 				ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(candidate);
 				candidate.setScope(scopeMetadata.getScopeName());
+
+				// *使用beanName生成器来生成beanName.
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
+
 				if (candidate instanceof AbstractBeanDefinition) {
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
+
 				if (candidate instanceof AnnotatedBeanDefinition) {
+					// 处理定义在目标类上的通用注解，如：@Lazy,@Primary,@DependsOn,@Role, @Description, 然后设置到candidate对象中。
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
+
+				// 检查beanName是否已经注册过，如果注册过，检查是否兼容。
 				if (checkCandidate(beanName, candidate)) {
+
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
-					definitionHolder =
-							AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+
+					definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+
 					beanDefinitions.add(definitionHolder);
+
+					// 注册beanDefinition
 					registerBeanDefinition(definitionHolder, this.registry);
 				}
 			}
@@ -333,6 +349,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 	 * bean definition has been found for the specified name
 	 */
 	protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws IllegalStateException {
+		// *判断容器中是否存在
 		if (!this.registry.containsBeanDefinition(beanName)) {
 			return true;
 		}
@@ -341,6 +358,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		if (originatingDef != null) {
 			existingDef = originatingDef;
 		}
+		// *判断是否兼容
 		if (isCompatible(beanDefinition, existingDef)) {
 			return false;
 		}

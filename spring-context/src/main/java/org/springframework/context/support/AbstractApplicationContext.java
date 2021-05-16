@@ -670,6 +670,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
         // Validate that all properties marked as required are resolvable:
         // see ConfigurablePropertyResolver#setRequiredProperties
+        // 获取环境变量，并且设置systemEnvironment，systemProperties环境配置。
         getEnvironment().validateRequiredProperties();
 
         // Store pre-refresh ApplicationListeners...

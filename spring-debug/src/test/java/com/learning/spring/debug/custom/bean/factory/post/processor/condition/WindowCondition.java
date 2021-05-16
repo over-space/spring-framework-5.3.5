@@ -1,19 +1,19 @@
-package com.learning.spring.debug.custom.condition;
+package com.learning.spring.debug.custom.bean.factory.post.processor.condition;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
-public class LinuxCondition implements Condition {
+public class WindowCondition implements Condition {
 
     private static String OS = System.getProperty("os.name").toLowerCase();
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        return isLinux();
+        return isWindow();
     }
 
-    private boolean isLinux(){
-        return (OS.contains("nix") || OS.contains("nux") || OS.contains("aix"));
+    private boolean isWindow(){
+        return OS.contains("win");
     }
 }

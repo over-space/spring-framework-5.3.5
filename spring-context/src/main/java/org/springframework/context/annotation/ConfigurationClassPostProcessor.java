@@ -338,8 +338,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		do {
 			StartupStep processConfig = this.applicationStartup.start("spring.context.config-classes.parse");
 
-			// *执行解析处理
+			// **执行@Configuration解析处理
 			parser.parse(candidates);
+
 			parser.validate();
 
 			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());

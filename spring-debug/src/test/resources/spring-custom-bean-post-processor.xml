@@ -11,7 +11,7 @@
             http://www.learning.org/schema/user
             http://www.learning.org/schema/user.xsd">
 
-    <context:component-scan base-package="com.learning.spring.debug"></context:component-scan>
+    <context:component-scan base-package="com.learning.spring.debug.custom.bean.factory.post.processor.condition.config"></context:component-scan>
 
 
     <!--自定义BeanDefinitionRegistryPostProcessor-->

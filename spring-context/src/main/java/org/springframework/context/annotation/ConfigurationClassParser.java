@@ -171,8 +171,12 @@ class ConfigurationClassParser {
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
 			try {
+				/**
+				 * @see ConfigurationClassParser#processConfigurationClass(org.springframework.context.annotation.ConfigurationClass, java.util.function.Predicate)
+				 */
+				// 根据不同类型的BeanDefinition,调用不同parse不同的重载方法，实际上最终都是调用ConfigurationClassParser#processConfigurationClass方法。
 				if (bd instanceof AnnotatedBeanDefinition) {
-					// 注解
+					// 解析注解标识类
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
 				else if (bd instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) bd).hasBeanClass()) {
@@ -230,10 +234,13 @@ class ConfigurationClassParser {
 			return;
 		}
 
+		// 第一次进入的时候，configurationClasses#size为0，existingClass为空，在此处处理configuration重复Import的问题。
+		// 如果同一配置类被处理两次，两次都属于被import的则合并导入类并且返回，如果配置类不是被导入的，移除旧的使用新的配置类。
 		ConfigurationClass existingClass = this.configurationClasses.get(configClass);
 		if (existingClass != null) {
 			if (configClass.isImported()) {
 				if (existingClass.isImported()) {
+					// 合并
 					existingClass.mergeImportedBy(configClass);
 				}
 				// Otherwise ignore new imported config class; existing non-imported class overrides it.
@@ -242,6 +249,7 @@ class ConfigurationClassParser {
 			else {
 				// Explicit bean definition found, probably replacing an import.
 				// Let's remove the old one and go with the new one.
+				// 移除旧的配置类，使用新的。
 				this.configurationClasses.remove(configClass);
 				this.knownSuperclasses.values().removeIf(configClass::equals);
 			}
@@ -270,17 +278,21 @@ class ConfigurationClassParser {
 			ConfigurationClass configClass, SourceClass sourceClass, Predicate<String> filter)
 			throws IOException {
 
+		// *判断类是否被@Component修饰
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
 			// Recursively process any member (nested) classes first
-			// 递归处理内部类
+			// *递归处理内部类
 			processMemberClasses(configClass, sourceClass, filter);
 		}
 
 		// Process any @PropertySource annotations
-		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
-				sourceClass.getMetadata(), PropertySources.class,
+		// *判断是否被@PropertySource注解修饰
+		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(sourceClass.getMetadata(), PropertySources.class,
 				org.springframework.context.annotation.PropertySource.class)) {
+
+			// * this.environment=StandardEnvironment为ConfigurableEnvironment子类
 			if (this.environment instanceof ConfigurableEnvironment) {
+				// *处理@PropertySource
 				processPropertySource(propertySource);
 			}
 			else {
@@ -290,21 +302,26 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @ComponentScan annotations
-		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
-				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
-		if (!componentScans.isEmpty() &&
-				!this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
+		// *处理被@ComponentScan修饰的类
+		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
+
+		if (!componentScans.isEmpty() && !this.conditionEvaluator.shouldSkip(sourceClass.getMetadata(), ConfigurationPhase.REGISTER_BEAN)) {
+
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
-				Set<BeanDefinitionHolder> scannedBeanDefinitions =
-						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
+
+				// *通过ComponentScanAnnotationParser类解析@ComponentScan
+				Set<BeanDefinitionHolder> scannedBeanDefinitions = this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
+
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
+				// *检查扫描的类是否有其他配置类，并在需要时递归解析
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();
 					if (bdCand == null) {
 						bdCand = holder.getBeanDefinition();
 					}
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
+						// *递归继续解析
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
 				}
@@ -312,11 +329,11 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		// *处理@Import注解
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
-		AnnotationAttributes importResource =
-				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
+		AnnotationAttributes importResource = AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
 		if (importResource != null) {
 			String[] resources = importResource.getStringArray("locations");
 			Class<? extends BeanDefinitionReader> readerClass = importResource.getClass("reader");
@@ -356,7 +373,7 @@ class ConfigurationClassParser {
 	private void processMemberClasses(ConfigurationClass configClass, SourceClass sourceClass,
 			Predicate<String> filter) throws IOException {
 
-		// 获取全部内部类
+		// *获取全部内部类
 		Collection<SourceClass> memberClasses = sourceClass.getMemberClasses();
 
 		if (!memberClasses.isEmpty()) {
@@ -367,7 +384,10 @@ class ConfigurationClassParser {
 					candidates.add(memberClass);
 				}
 			}
+
+			// *可通过@Order注解对配置类进行排序
 			OrderComparator.sort(candidates);
+
 			for (SourceClass candidate : candidates) {
 				if (this.importStack.contains(configClass)) {
 					this.problemReporter.error(new CircularImportProblem(configClass, this.importStack));
@@ -375,6 +395,7 @@ class ConfigurationClassParser {
 				else {
 					this.importStack.push(configClass);
 					try {
+						// 进入递归，继续解析内部类（内部类可能还存在内部类）
 						processConfigurationClass(candidate.asConfigClass(configClass), filter);
 					}
 					finally {
@@ -446,14 +467,17 @@ class ConfigurationClassParser {
 	 * @throws IOException if loading a property source failed
 	 */
 	private void processPropertySource(AnnotationAttributes propertySource) throws IOException {
+		// *读取name属性
 		String name = propertySource.getString("name");
 		if (!StringUtils.hasLength(name)) {
 			name = null;
 		}
+		// *读取encoding属性
 		String encoding = propertySource.getString("encoding");
 		if (!StringUtils.hasLength(encoding)) {
 			encoding = null;
 		}
+		// *读取value属性
 		String[] locations = propertySource.getStringArray("value");
 		Assert.isTrue(locations.length > 0, "At least one @PropertySource(value) location is required");
 		boolean ignoreResourceNotFound = propertySource.getBoolean("ignoreResourceNotFound");
@@ -462,10 +486,16 @@ class ConfigurationClassParser {
 		PropertySourceFactory factory = (factoryClass == PropertySourceFactory.class ?
 				DEFAULT_PROPERTY_SOURCE_FACTORY : BeanUtils.instantiateClass(factoryClass));
 
+		// *遍历资源文件路径
 		for (String location : locations) {
 			try {
+				// *处理文件名可能存在占位符,eg:spring-${dev}.properties.
 				String resolvedLocation = this.environment.resolveRequiredPlaceholders(location);
+
+				// *读取资源文件
 				Resource resource = this.resourceLoader.getResource(resolvedLocation);
+
+				// 将资源文件添加到environment中。
 				addPropertySource(factory.createPropertySource(name, new EncodedResource(resource, encoding)));
 			}
 			catch (IllegalArgumentException | FileNotFoundException | UnknownHostException | SocketException ex) {
