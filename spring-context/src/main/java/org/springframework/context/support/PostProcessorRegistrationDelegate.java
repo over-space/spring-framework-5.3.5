@@ -283,20 +283,28 @@ final class PostProcessorRegistrationDelegate {
 		// to ensure that your proposal does not result in a breaking change:
 		// https://github.com/spring-projects/spring-framework/issues?q=PostProcessorRegistrationDelegate+is%3Aclosed+label%3A%22status%3A+declined%22
 
+		// *查找所有实现了BeanPostProcessor的子类
 		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
 
-		// Register BeanPostProcessorChecker that logs an info message when
-		// a bean is created during BeanPostProcessor instantiation, i.e. when
-		// a bean is not eligible for getting processed by all BeanPostProcessors.
+		// register beanpostprocessorchecker that logs an info message when
+		// a bean is created during beanpostprocessor instantiation, i.e. when
+		// a bean is not eligible for getting processed by all beanpostprocessors.
 		int beanProcessorTargetCount = beanFactory.getBeanPostProcessorCount() + 1 + postProcessorNames.length;
 		beanFactory.addBeanPostProcessor(new BeanPostProcessorChecker(beanFactory, beanProcessorTargetCount));
 
 		// Separate between BeanPostProcessors that implement PriorityOrdered,
 		// Ordered, and the rest.
+		// *存放实现了PriorityOrdered，BeanPostProcessor接口的子类
 		List<BeanPostProcessor> priorityOrderedPostProcessors = new ArrayList<>();
+
 		List<BeanPostProcessor> internalPostProcessors = new ArrayList<>();
+
+		// *存放实现了Ordered，BeanPostProcessor接口的子类
 		List<String> orderedPostProcessorNames = new ArrayList<>();
+
+		// *存放普通的BeanPostProcessor接口的子类
 		List<String> nonOrderedPostProcessorNames = new ArrayList<>();
+
 		for (String ppName : postProcessorNames) {
 			if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
 				BeanPostProcessor pp = beanFactory.getBean(ppName, BeanPostProcessor.class);

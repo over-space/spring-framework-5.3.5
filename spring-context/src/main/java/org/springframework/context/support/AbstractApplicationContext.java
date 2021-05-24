@@ -569,37 +569,38 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
             StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
             // Prepare this context for refreshing.
-            // 容器refresh前装备工作
-            // 1. 设置启动时间
-            // 2. 设置活跃状态为true
-            // 3. 设置关闭状态为false
-            // 4. 获取Environment对象，并加载当前系统属性值到Environment中
-            // 5. 准备监听器和事件的集合对象，默认为空集合
+            // *容器refresh前装备工作
+            // *1. 设置启动时间
+            // *2. 设置活跃状态为true
+            // *3. 设置关闭状态为false
+            // *4. 获取Environment对象，并加载当前系统属性值到Environment中
+            // *5. 准备监听器和事件的集合对象，默认为空集合
             prepareRefresh();
 
             // Tell the subclass to refresh the internal bean factory.
-            // 创建BeanFactory工厂(DefaultListableBeanFactory)
-            // 加载xml配置文件的属性到当前工厂中，最重要的就是BeanDefinition
+            // *创建BeanFactory工厂(DefaultListableBeanFactory)
+            // *加载xml配置文件的属性到当前工厂中，最重要的就是BeanDefinition
             ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
             // Prepare the bean factory for use in this context.
-            // 准备Bean工厂,对各种属性进行填充
+            // *准备Bean工厂,对各种属性进行填充
             prepareBeanFactory(beanFactory);
 
             try {
                 // Allows post-processing of the bean factory in context subclasses.
-                // 啥也没干，预留扩展接口，由子类去实现。
-                // web环境中，有具体实现
+                // *啥也没干，预留扩展接口，由子类去实现。
+                // *web环境中，有具体实现
                 postProcessBeanFactory(beanFactory);
 
                 StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 
                 // Invoke factory processors re	gistered as beans in the context.
-                // 执行全部实现BeanFactoryPostProcess的子类
+                // *执行全部实现BeanFactoryPostProcess的子类
+                // *ConfigurationClassPostProcessor继承于BeanDefinitionRegistryPostProcessor,对注解进行解析。
                 invokeBeanFactoryPostProcessors(beanFactory);
 
                 // Register bean processors that intercept bean creation.
-                //
+                // *注册BeanPostProcessor
                 registerBeanPostProcessors(beanFactory);
                 beanPostProcess.end();
 
