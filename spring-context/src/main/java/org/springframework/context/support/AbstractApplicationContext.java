@@ -600,14 +600,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
                 invokeBeanFactoryPostProcessors(beanFactory);
 
                 // Register bean processors that intercept bean creation.
-                // *注册BeanPostProcessor
+                // *注册BeanPostProcessor，只负责注册，不再这里执行
                 registerBeanPostProcessors(beanFactory);
                 beanPostProcess.end();
 
                 // Initialize message source for this context.
+                // *为上下文初始化message源，即不同语言的消息体，国际化处理（i18n）
                 initMessageSource();
 
                 // Initialize event multicaster for this context.
+                // *初始化事件多播器
                 initApplicationEventMulticaster();
 
                 // Initialize other special beans in specific context subclasses.
@@ -836,6 +838,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
      */
     protected void initMessageSource() {
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        // *判断是否再xml中自定义了id为messageSource的bean对象。
         if (beanFactory.containsLocalBean(MESSAGE_SOURCE_BEAN_NAME)) {
             this.messageSource = beanFactory.getBean(MESSAGE_SOURCE_BEAN_NAME, MessageSource.class);
             // Make MessageSource aware of parent MessageSource.
@@ -852,9 +855,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
             }
         } else {
             // Use empty MessageSource to be able to accept getMessage calls.
+            // *使用spring默认的实现
             DelegatingMessageSource dms = new DelegatingMessageSource();
             dms.setParentMessageSource(getInternalParentMessageSource());
             this.messageSource = dms;
+
+            // *将messageSource注册到bean工厂中
             beanFactory.registerSingleton(MESSAGE_SOURCE_BEAN_NAME, this.messageSource);
             if (logger.isTraceEnabled()) {
                 logger.trace("No '" + MESSAGE_SOURCE_BEAN_NAME + "' bean, using [" + this.messageSource + "]");
@@ -871,12 +877,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     protected void initApplicationEventMulticaster() {
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
         if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
-            this.applicationEventMulticaster =
-                    beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
+
+            // *判断bean工厂中是否自定了beanName为applicationEventMulticaster的多播器
+
+            this.applicationEventMulticaster = beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
             if (logger.isTraceEnabled()) {
                 logger.trace("Using ApplicationEventMulticaster [" + this.applicationEventMulticaster + "]");
             }
         } else {
+            // *使用默认的事件多播器
             this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
             beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
             if (logger.isTraceEnabled()) {
