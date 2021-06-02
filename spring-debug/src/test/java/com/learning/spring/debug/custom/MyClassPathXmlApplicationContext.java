@@ -1,6 +1,5 @@
 package com.learning.spring.debug.custom;
 
-import com.learning.spring.debug.custom.bean.factory.post.processor.CustomBeanFactoryPostProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeansException;

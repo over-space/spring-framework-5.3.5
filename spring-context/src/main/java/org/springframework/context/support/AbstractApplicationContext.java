@@ -613,9 +613,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
                 initApplicationEventMulticaster();
 
                 // Initialize other special beans in specific context subclasses.
+                // *啥也没干，预留给子类扩展初始化其他bean.
                 onRefresh();
 
                 // Check for listener beans and register them.
+                // *注册事件监听器
                 registerListeners();
 
                 // Instantiate all remaining (non-lazy-init) singletons.
@@ -877,7 +879,6 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     protected void initApplicationEventMulticaster() {
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
         if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
-
             // *判断bean工厂中是否自定了beanName为applicationEventMulticaster的多播器
 
             this.applicationEventMulticaster = beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
@@ -887,6 +888,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
         } else {
             // *使用默认的事件多播器
             this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+
+            // *注册到bean工厂中。
             beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
             if (logger.isTraceEnabled()) {
                 logger.trace("No '" + APPLICATION_EVENT_MULTICASTER_BEAN_NAME + "' bean, using " +
@@ -939,18 +942,22 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
      */
     protected void registerListeners() {
         // Register statically specified listeners first.
+        // *遍历应用程序中存在的监听器集合，并将对应的监听器添加到监听器的多路广播器中
         for (ApplicationListener<?> listener : getApplicationListeners()) {
             getApplicationEventMulticaster().addApplicationListener(listener);
         }
 
         // Do not initialize FactoryBeans here: We need to leave all regular beans
         // uninitialized to let post-processors apply to them!
+        // *从容器中获取所有实现了ApplicationListener接口beanName
+        // *依次遍历放入到多播器的集合中
         String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
         for (String listenerBeanName : listenerBeanNames) {
             getApplicationEventMulticaster().addApplicationListenerBean(listenerBeanName);
         }
 
         // Publish early application events now that we finally have a multicaster...
+        // *此处先发布早期的监听器集合
         Set<ApplicationEvent> earlyEventsToProcess = this.earlyApplicationEvents;
         this.earlyApplicationEvents = null;
         if (!CollectionUtils.isEmpty(earlyEventsToProcess)) {

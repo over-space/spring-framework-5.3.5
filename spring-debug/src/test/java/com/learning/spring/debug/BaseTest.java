@@ -14,7 +14,6 @@ public abstract class BaseTest {
 
     protected static final Logger logger = LogManager.getLogger(BaseTest.class);
 
-    protected ApplicationContext applicationContext;
 
     @BeforeAll
     public static void beforeAll() {
@@ -28,22 +27,5 @@ public abstract class BaseTest {
         logger.info("");
         logger.info("-------------------------------------测试方法执行完成---------------------------------------------");
         logger.info("================================================================================================");
-    }
-
-    @BeforeEach
-    public void initApplicationContext() {
-        ContextConfiguration annotation = this.getClass().getDeclaredAnnotation(ContextConfiguration.class);
-
-        Assertions.assertNotNull(annotation, "请使用@ContextConfiguration注解指定spring配置文件。");
-
-        String[] locations = annotation.value();
-
-        Assertions.assertNotNull(locations);
-
-        Assertions.assertNotNull(annotation, "请使用@ContextConfiguration注解指定spring xml配置文件。");
-
-        logger.info("spring locations : {}\n", locations);
-
-        applicationContext = new MyClassPathXmlApplicationContext(locations[0]);
     }
 }

@@ -1,19 +1,17 @@
 package com.learning.spring.debug.test;
 
-import com.learning.spring.debug.BaseTest;
+import com.learning.spring.debug.SpringBaseTest;
 import com.learning.spring.debug.custom.A;
 import com.learning.spring.debug.custom.B;
 import com.learning.spring.debug.custom.C1;
-import com.learning.spring.debug.custom.MyClassPathXmlApplicationContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration("classpath:applicationContext.xml")
-public class SpringDebugTest extends BaseTest {
+public class SpringDebugTest extends SpringBaseTest {
 
     private static final Logger logger = LogManager.getLogger(SpringDebugTest.class);
 
