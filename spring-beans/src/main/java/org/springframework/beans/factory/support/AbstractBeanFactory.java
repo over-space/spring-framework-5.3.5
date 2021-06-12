@@ -1825,7 +1825,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			mbd.isFactoryBean = true;
 		}
 		else {
-			// 优先从factoryBeanObjectCache 中获取通过实现FactoryBean接口生成的Bean对象。
+			// 优先从factoryBeanObjectCache 缓存中中获取通过实现FactoryBean接口生成的Bean对象。
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
@@ -1836,6 +1836,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
+
+			// *从FactoryBean中获取bean对象
 			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
 		}
 		return object;

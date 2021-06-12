@@ -31,6 +31,7 @@ public class SpringDebugTest extends SpringBaseTest {
 
         B bean1 = (B) applicationContext.getBean("bFactoryBean");
         B bean2 = (B) applicationContext.getBean("bFactoryBean");
+        B bean3 = (B) applicationContext.getBean("&bFactoryBean");
 
         Assertions.assertTrue(bean1 == bean2);
     }

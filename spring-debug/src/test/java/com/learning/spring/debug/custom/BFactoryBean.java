@@ -23,6 +23,6 @@ public class BFactoryBean implements FactoryBean<B> {
     @Override
     public boolean isSingleton() {
         // 设置B是否为singleton, 如果是就将getObject创建的bean放入factoryBeanObjectCache中。
-        return FactoryBean.super.isSingleton();
+        return true;
     }
 }
