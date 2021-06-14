@@ -3,6 +3,7 @@ package com.learning.spring.debug.test;
 import com.learning.spring.debug.SpringBaseTest;
 import com.learning.spring.debug.custom.A;
 import com.learning.spring.debug.custom.B;
+import com.learning.spring.debug.custom.BFactoryBean;
 import com.learning.spring.debug.custom.C1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +32,7 @@ public class SpringDebugTest extends SpringBaseTest {
 
         B bean1 = (B) applicationContext.getBean("bFactoryBean");
         B bean2 = (B) applicationContext.getBean("bFactoryBean");
-        B bean3 = (B) applicationContext.getBean("&bFactoryBean");
+        BFactoryBean bean3 = (BFactoryBean) applicationContext.getBean("&bFactoryBean");
 
         Assertions.assertTrue(bean1 == bean2);
     }

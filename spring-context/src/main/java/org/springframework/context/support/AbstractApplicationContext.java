@@ -621,6 +621,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
                 registerListeners();
 
                 // Instantiate all remaining (non-lazy-init) singletons.
+                // *实例化剩余的非延迟的单例bean对象。
                 finishBeanFactoryInitialization(beanFactory);
 
                 // Last step: publish corresponding event.
@@ -974,34 +975,40 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
     protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
         // Initialize conversion service for this context.
 
-        if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
-                beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
-            beanFactory.setConversionService(
-                    beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
+        // *为上下文初始化类转换器服务
+        if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) && beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
+
+            // *通过getBean创建出值转换服务。
+            beanFactory.setConversionService(beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
+
         }
 
         // Register a default embedded value resolver if no BeanFactoryPostProcessor
         // (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
         // at this point, primarily for resolution in annotation attribute values.
+
+        // *判断容器是否注册内嵌的值解析器，如果没有则注册默认的值解析器，主要用于注解属性值的解析
         if (!beanFactory.hasEmbeddedValueResolver()) {
             beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
         }
 
         // Initialize LoadTimeWeaverAware beans early to allow for registering their transformers early.
+        // *优先初始化LoadTimeWeaver Bean, 以便尽早注册它们的转换器
         String[] weaverAwareNames = beanFactory.getBeanNamesForType(LoadTimeWeaverAware.class, false, false);
         for (String weaverAwareName : weaverAwareNames) {
             getBean(weaverAwareName);
         }
 
         // Stop using the temporary ClassLoader for type matching.
+        // *江临时的ClassLoader清空，禁止使用临时的ClassLoader进行类型匹配
         beanFactory.setTempClassLoader(null);
 
         // Allow for caching all bean definition metadata, not expecting further changes.
-        // 设置冻结标志，冻结所有的bean, 说明注册的bean将不被修改或进一步处理。
+        // *设置冻结标志，冻结所有的bean, 说明注册的bean将不被修改或进一步处理。
         beanFactory.freezeConfiguration();
 
         // Instantiate all remaining (non-lazy-init) singletons.
-        // 实例化剩下的单例对象
+        // *实例化剩下的单例对象
         beanFactory.preInstantiateSingletons();
     }
 

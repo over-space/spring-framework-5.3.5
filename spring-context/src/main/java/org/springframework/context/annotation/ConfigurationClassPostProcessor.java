@@ -267,7 +267,11 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
 
+		// *这个增强使用了cglib，在这个类中增加了一个接口EnhancedConfiguration，这个接口继承了BeanFactoryAware接口，也就是说这个类实现了BeanFactoryAware接口；
+		// *增加了一个共有字段，名称为beanFactory，类型为BeanFactory（实现BeanFactoryAware这个接口必要的字段）；然后是对setBeanFactory进行了增强,对Bean注解的方法进行了增强，主要是对factoryBean和循环引用进行处理
+		// *如果被扫描的类使用了Bean注解且有循环引用，或者有factoryBean，则一定要在类上面加Configuration注解，否则，可以不用加，程序依然顺利通过
 		enhanceConfigurationClasses(beanFactory);
+
 		beanFactory.addBeanPostProcessor(new ImportAwareBeanPostProcessor(beanFactory));
 	}
 

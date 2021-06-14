@@ -500,6 +500,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Prepare method overrides.
+		// *准备方法覆盖操作，当需要创建的bean对象包含了lookup-method,replace-method标签时，会产生覆盖操作。
+		// *这里只标记存在覆盖操作
 		try {
 			mbdToUse.prepareMethodOverrides();
 		}
@@ -510,6 +512,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
+			// *给BeanPostProcessors一个机会，生成一个bean的代理对象来代理真正的实例
+			// *通过实现InstantiationAwareBeanPostProcessors
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
@@ -558,13 +562,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		logger.info("Creating instance of bean '" + beanName + "'");
 
 		// Instantiate the bean.
+		// Bean的包装类，用来持有创建出来的bean对象。
 		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
+			// 单例对象，从factoryBean实例缓存中移除当前对象。
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
+
 		if (instanceWrapper == null) {
+			// 根据相应的策略（工厂方法、构造函数、简单初始化）创建新的实例
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
+
 		Object bean = instanceWrapper.getWrappedInstance();
 		Class<?> beanType = instanceWrapper.getWrappedClass();
 		if (beanType != NullBean.class) {
@@ -1116,6 +1125,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object bean = null;
 		if (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) {
 			// Make sure bean class is actually resolved at this point.
+			// *synthetic是否合成，在aop的情况下才会为true.
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
@@ -1166,6 +1176,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) {
 		// Make sure bean class is actually resolved at this point.
+		// *获取当前对象的类对象
 		Class<?> beanClass = resolveBeanClass(mbd, beanName);
 
 		if (beanClass != null && !Modifier.isPublic(beanClass.getModifiers()) && !mbd.isNonPublicAccessAllowed()) {
@@ -1173,6 +1184,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
 		}
 
+		// *判断当前beanDefinition中是否包含实例供应器，相当于回调方法，利用回调方法创建bean对象。
 		Supplier<?> instanceSupplier = mbd.getInstanceSupplier();
 		if (instanceSupplier != null) {
 			return obtainFromSupplier(instanceSupplier, beanName);

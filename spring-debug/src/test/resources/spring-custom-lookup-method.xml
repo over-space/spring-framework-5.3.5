@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <bean id="apple" class="com.learning.spring.debug.custom.lookup.method.Apple" scope="prototype"></bean>
+
+    <bean id="banana" class="com.learning.spring.debug.custom.lookup.method.Banana" scope="prototype"></bean>
+
+    <bean id="fruitPlate01" class="com.learning.spring.debug.custom.lookup.method.FruitPlate">
+        <lookup-method name="getFruit" bean="apple"></lookup-method>
+    </bean>
+
+    <bean id="fruitPlate02" class="com.learning.spring.debug.custom.lookup.method.FruitPlate">
+        <lookup-method name="getFruit" bean="banana"></lookup-method>
+    </bean>
+</beans>

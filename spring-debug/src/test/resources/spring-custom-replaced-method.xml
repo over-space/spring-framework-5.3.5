@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <bean id="replaceDog" class="com.learning.spring.debug.custom.replaced.method.ReplaceDog"/>
+
+    <bean id="originalDog" class="com.learning.spring.debug.custom.replaced.method.OriginalDog">
+        <replaced-method name="sayHello" replacer="replaceDog">
+            <arg-type match="java.lang.String"/>
+        </replaced-method>
+    </bean>
+
+</beans>
