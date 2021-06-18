@@ -500,7 +500,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Prepare method overrides.
-		// *准备方法覆盖操作，当需要创建的bean对象包含了lookup-method,replace-method标签时，会产生覆盖操作。
+		// *准备方法覆盖操作，当n需要创建的bean对象包含了lookup-method,replace-method标签时，会产生覆盖操作。
 		// *这里只标记存在覆盖操作
 		try {
 			mbdToUse.prepareMethodOverrides();
@@ -570,7 +570,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (instanceWrapper == null) {
-			// 根据相应的策略（工厂方法、构造函数、简单初始化）创建新的实例
+			// *根据相应的策略（工厂方法、构造函数、简单初始化）创建新的实例
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 
@@ -1190,6 +1190,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return obtainFromSupplier(instanceSupplier, beanName);
 		}
 
+		// *自定义工厂方法创建bean对象（静态工厂，实例工厂）
 		if (mbd.getFactoryMethodName() != null) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
@@ -1245,6 +1246,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		String outerBean = this.currentlyCreatedBean.get();
 		this.currentlyCreatedBean.set(beanName);
 		try {
+			// *调用用户自定的Supplier#get方法获取bean对象。
 			instance = instanceSupplier.get();
 		}
 		finally {
