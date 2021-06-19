@@ -1196,6 +1196,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Shortcut when re-creating the same bean...
+
 		boolean resolved = false;
 		boolean autowireNecessary = false;
 		if (args == null) {
@@ -1229,6 +1230,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// No special handling: simply use no-arg constructor.
+		// *使用默认的无参构造函数创建对象，如果没有无参构造函数且存在多个有参构造函数并且没有@Autowire注解，会报错。
 		return instantiateBean(beanName, mbd);
 	}
 
