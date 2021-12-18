@@ -69,6 +69,9 @@ public class CustomInstantiationAwareBeanPostProcessors implements Instantiation
     public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
         logger.info("执行CustomInstantiationAwareBeanPostProcessors#postProcessAfterInstantiation");
 
+        // *可以在这里进行bean的初始化操作，在这里会执行org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean
+        // *通过返回值控制是否需要执行后续初始化过程，false：不进行后续处理，true: 继续执行后续处理，属性值可能会被覆盖。
+
         return InstantiationAwareBeanPostProcessor.super.postProcessAfterInstantiation(bean, beanName);
     }
 
