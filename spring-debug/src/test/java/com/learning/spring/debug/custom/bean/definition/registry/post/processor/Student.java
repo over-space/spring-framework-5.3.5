@@ -7,8 +7,11 @@ public class Student {
 
     private static final Logger logger = LogManager.getLogger(Student.class);
 
+    private Integer id;
 
     private String name;
+
+    private Integer age;
 
     public Student() {
         logger.info("实例化student对象：{}", Student.class.getName());
@@ -22,10 +25,28 @@ public class Student {
         this.name = name;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
                 '}';
     }
 }

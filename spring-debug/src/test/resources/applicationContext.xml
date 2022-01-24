@@ -14,7 +14,7 @@
         <property name="name" value="jack"/>
     </bean>
 
-    <bean id="bFactoryBean" class="com.learning.spring.debug.custom.BFactoryBean"/>
+    <bean id="bFactoryBean" class="com.learning.spring.debug.custom.factory_bean.BFactoryBean"/>
 
     <bean id="c1" class="com.learning.spring.debug.custom.C1">
         <property name="c2" ref="c2"/>

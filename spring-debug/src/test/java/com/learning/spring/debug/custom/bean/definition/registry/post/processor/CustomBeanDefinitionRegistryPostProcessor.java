@@ -28,10 +28,12 @@ public class CustomBeanDefinitionRegistryPostProcessor implements BeanDefinition
 
         // 第二种方式
         registry.registerBeanDefinition("student", BeanDefinitionBuilder.rootBeanDefinition(Student.class)
+                .addPropertyValue("id", 10000)
                 .addPropertyValue("name", "lisi")
+                .addPropertyValue("age", 20)
                 .getBeanDefinition());
 
-        // 注册一个BeanFactoryPostProcessor
+        // 注册BeanFactoryPostProcessor
         registry.registerBeanDefinition(MyBeanFactoryPostProcessor01.class.getSimpleName(), new RootBeanDefinition(MyBeanFactoryPostProcessor01.class));
         registry.registerBeanDefinition(MyBeanFactoryPostProcessor02.class.getSimpleName(), new RootBeanDefinition(MyBeanFactoryPostProcessor02.class));
     }

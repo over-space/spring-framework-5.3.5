@@ -136,9 +136,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
 		synchronized (this.singletonObjects) {
+			// 添加到一级缓存
 			this.singletonObjects.put(beanName, singletonObject);
+			// 从二级，三级缓存中移除
 			this.singletonFactories.remove(beanName);
 			this.earlySingletonObjects.remove(beanName);
+
+			// 添加到已注册的bean集合
 			this.registeredSingletons.add(beanName);
 		}
 	}
@@ -226,7 +230,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
+
+				// *将bean添加到”正在创建“的集合中。
 				beforeSingletonCreation(beanName);
+
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
 				if (recordSuppressedExceptions) {
@@ -256,9 +263,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					if (recordSuppressedExceptions) {
 						this.suppressedExceptions = null;
 					}
+
+					// *bean已经创建完成，从”正在创建“集合中移除
 					afterSingletonCreation(beanName);
 				}
+
 				if (newSingleton) {
+					// 添加到一级缓存中，比从二、三级缓存移除
 					addSingleton(beanName, singletonObject);
 				}
 			}

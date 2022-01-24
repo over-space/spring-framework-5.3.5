@@ -43,6 +43,7 @@ import org.springframework.beans.factory.config.AutowiredPropertyMarker;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.DependencyDescriptor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
@@ -478,6 +479,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     @Override
     protected Object createBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)
             throws BeanCreationException {
+        /**
+         * *创建bean的方式：
+         * 1. 实现InstantiationAwareBeanPostProcessors#postProcessBeforeInstantiation
+         *    @see com.learning.spring.debug.custom.instantiation_aware_bean_post_processors.CustomInstantiationAwareBeanPostProcessors#postProcessBeforeInstantiation(java.lang.Class, java.lang.String)
+         * 2. Supplier方式，实现BeanFactoryPostProcessor#postProcessBeanFactory
+         *    @see com.learning.spring.debug.custom.supplier.SupplierBeanFactoryPostProcessors#postProcessBeanFactory(ConfigurableListableBeanFactory)
+         * 3. 自定义工厂方法创建bean对象（静态工厂，实例工厂）
+         * 4. 实现FactoryBean
+         *    @see com.learning.spring.debug.custom.factory_bean.BirdFactoryBean
+         * 5. 实现BFPP创建，通过实现BeanDefinitionRegistryPostProcessor，向容器中注册BeanDefinition
+         *    @see com.learning.spring.debug.custom.bean.definition.registry.post.processor.CustomBeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry(org.springframework.beans.factory.support.BeanDefinitionRegistry)
+         */
 
         if (logger.isTraceEnabled()) {
             logger.trace("Creating instance of bean '" + beanName + "'");

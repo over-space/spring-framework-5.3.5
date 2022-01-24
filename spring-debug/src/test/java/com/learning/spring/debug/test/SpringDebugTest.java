@@ -2,12 +2,9 @@ package com.learning.spring.debug.test;
 
 import com.learning.spring.debug.SpringBaseTest;
 import com.learning.spring.debug.custom.A;
-import com.learning.spring.debug.custom.B;
-import com.learning.spring.debug.custom.BFactoryBean;
 import com.learning.spring.debug.custom.C1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -26,16 +23,6 @@ public class SpringDebugTest extends SpringBaseTest {
         bean.sayHello();
     }
 
-    @Test
-    public void testFactoryBean() {
-        // 测试通过FactoryBean创建Bean的过程
-
-        B bean1 = (B) applicationContext.getBean("bFactoryBean");
-        B bean2 = (B) applicationContext.getBean("bFactoryBean");
-        BFactoryBean bean3 = (BFactoryBean) applicationContext.getBean("&bFactoryBean");
-
-        Assertions.assertTrue(bean1 == bean2);
-    }
 
     @Test
     public void testCircularReferences() {
