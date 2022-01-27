@@ -148,6 +148,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
         // 前置处理，用于子类扩展实现(spring mvc)
         preProcessXml(root);
 
+        // 解析beanDefinition定义信息
         parseBeanDefinitions(root, this.delegate);
 
         // 后置处理，用于子类扩展实现(spring mvc)
@@ -189,6 +190,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
                 }
             }
         } else {
+            // 解析自定义标签元素
             delegate.parseCustomElement(root);
         }
     }
