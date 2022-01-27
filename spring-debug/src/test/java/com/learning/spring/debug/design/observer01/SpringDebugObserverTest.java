@@ -1,4 +1,4 @@
-package com.learning.spring.debug.test;
+package com.learning.spring.debug.design.observer01;
 
 import com.learning.spring.debug.BaseTest;
 import com.learning.spring.debug.design.observer01.BadmanObservable;

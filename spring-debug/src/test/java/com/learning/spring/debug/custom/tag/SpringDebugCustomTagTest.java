@@ -1,8 +1,6 @@
-package com.learning.spring.debug.test;
+package com.learning.spring.debug.custom.tag;
 
-import com.learning.spring.debug.BaseTest;
 import com.learning.spring.debug.SpringBaseTest;
-import com.learning.spring.debug.custom.tag.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,6 @@
-package com.learning.spring.debug.test;
+package com.learning.spring.debug.custom.supplier;
 
-import com.learning.spring.debug.custom.supplier.Astronaut;
-import com.learning.spring.debug.custom.supplier.Spacecraft;
+import com.learning.spring.debug.test.SpringDebugTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;

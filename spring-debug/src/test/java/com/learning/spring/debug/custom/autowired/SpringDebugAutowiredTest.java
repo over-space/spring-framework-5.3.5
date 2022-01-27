@@ -1,14 +1,13 @@
-package com.learning.spring.debug.test;
+package com.learning.spring.debug.custom.autowired;
 
-import com.learning.spring.debug.custom.autowired.D1;
-import com.learning.spring.debug.custom.autowired.D2;
+import com.learning.spring.debug.test.SpringDebugTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration("classpath:spring-custom-autowired.xml")
-public class SpringDebugAutowiredTest extends SpringDebugTest{
+public class SpringDebugAutowiredTest extends SpringDebugTest {
 
     private static final Logger logger = LogManager.getLogger(SpringDebugAutowiredTest.class);
 
