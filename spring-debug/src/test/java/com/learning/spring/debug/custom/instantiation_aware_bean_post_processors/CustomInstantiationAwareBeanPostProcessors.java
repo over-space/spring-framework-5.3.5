@@ -50,10 +50,14 @@ public class CustomInstantiationAwareBeanPostProcessors implements Instantiation
         logger.info("执行CustomInstantiationAwareBeanPostProcessors#postProcessBeforeInstantiation");
 
         if(beanClass == CustomService.class){
+            // *通过cglib返回代理类对象
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(CustomService.class);
             enhancer.setCallback(new CustomServiceInterceptor());
             return enhancer.create();
+        }else if(beanClass == TimeService.class){
+            // *直接返回对象
+            return new TimeService();
         }
         return null;
     }

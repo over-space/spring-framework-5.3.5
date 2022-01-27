@@ -9,5 +9,6 @@
             http://www.springframework.org/schema/context/spring-context.xsd">
 
     <bean id="customService" class="com.learning.spring.debug.custom.instantiation_aware_bean_post_processors.CustomService"/>
+    <bean id="timeService" class="com.learning.spring.debug.custom.instantiation_aware_bean_post_processors.TimeService"/>
     <bean id="customInstantiationAwareBeanPostProcessors" class="com.learning.spring.debug.custom.instantiation_aware_bean_post_processors.CustomInstantiationAwareBeanPostProcessors"/>
 </beans>
