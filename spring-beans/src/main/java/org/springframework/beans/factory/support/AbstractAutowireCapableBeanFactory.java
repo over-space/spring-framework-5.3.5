@@ -489,7 +489,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
          * 4. 实现FactoryBean
          *    @see com.learning.spring.debug.custom.factory_bean.BirdFactoryBean
          * 5. 实现BFPP创建，通过实现BeanDefinitionRegistryPostProcessor，向容器中注册BeanDefinition
-         *    @see com.learning.spring.debug.custom.bean.definition.registry.post.processor.CustomBeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry(org.springframework.beans.factory.support.BeanDefinitionRegistry)
+         *    @seecom.learning.spring.debug.custom.bean.definition.registry.post.processor.CustomBeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry(org.springframework.beans.factory.support.BeanDefinitionRegistry)
          */
 
         if (logger.isTraceEnabled()) {

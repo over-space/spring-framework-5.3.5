@@ -39,7 +39,7 @@ include "framework-bom"
 include "integration-tests"
 include "spring-debug"
 
-rootProject.name = "spring"
+rootProject.name = "spring-framework-5.3.5"
 rootProject.children.each {project ->
 	project.buildFileName = "${project.name}.gradle"
 }
